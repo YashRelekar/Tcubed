@@ -1,0 +1,16 @@
+{
+  "chat_model": "qwen2.5:1.5b",
+  "wake_word_threshold": 0.5,
+  "mic_sample_rate": 48000,
+  "target_sample_rate": 16000,
+  "mic_name": "XVF3800",
+  "speaker_name": "",
+  "camera_index": 0,
+  "libcamera_device": "",
+  "local_location": "Kingston, CA",
+  "display_width": 800,
+  "display_height": 480,
+  "use_framebuffer": true,
+  "enable_streaming_tts": false,
+  "enable_ui": false
+}
