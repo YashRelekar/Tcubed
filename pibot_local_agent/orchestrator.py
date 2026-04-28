@@ -176,7 +176,7 @@ class Orchestrator:
 
         # Speak startup message BEFORE starting wake word detection
         # (otherwise the speaker saying "Hey Jarvis" triggers the detector)
-        self._speak("Hello! I'm Jansky. Say hey Jansky to get my attention.")
+        self._speak('Hello! I\'m Jansky. Say "Hey Jansky" to get my attention.')
 
         # Start wake word detection after greeting finishes
         self.wake_word.start(callback=self._on_wake_word)
@@ -297,8 +297,8 @@ class Orchestrator:
             print("[custom] on camera introduction")
             self._speak(
                 "Hey all, I am Jansky, Mayukh's personal AI assistant "
-                "running 24 7 on the desk helping with all his daily chores! "
-                "Its great to meet you all"
+                "running 24/7 on the desk helping with all his daily chores! "
+                "It's great to meet you all"
             )
             return
 

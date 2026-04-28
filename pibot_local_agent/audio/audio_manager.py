@@ -210,6 +210,14 @@ class AudioManager:
         # For 48kHz → 16kHz the factor is exactly 3.
         decimate_factor = self.mic_sample_rate // self.sample_rate
         if decimate_factor < 1:
+            # mic_sample_rate < sample_rate: upsampling not supported here.
+            # This is unusual (mic recording at lower rate than target).
+            print(
+                "Warning: mic_sample_rate ({}) < sample_rate ({}); "
+                "returning audio at native rate.".format(
+                    self.mic_sample_rate, self.sample_rate
+                )
+            )
             decimate_factor = 1
         decimated = normalized[::decimate_factor]
         return decimated

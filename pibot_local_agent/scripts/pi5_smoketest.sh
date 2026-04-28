@@ -219,10 +219,10 @@ else
   # Create a 1-second silent WAV and transcribe it (output should be empty)
   SILENT_WAV="/tmp/jansky_smoke_silent.wav"
   python3 - <<PYEOF 2>/dev/null
-import wave, struct, os
+import wave, os
 with wave.open("$SILENT_WAV", "wb") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(16000)
-    w.writeframes(struct.pack("<16000h", *([0]*16000)))
+    w.writeframes(b'\x00\x00' * 16000)
 PYEOF
   if $WHISPER_BIN -m "$WHISPER_MODEL" -f "$SILENT_WAV" -l en -t 4 \
       --no-timestamps -np &>/dev/null; then

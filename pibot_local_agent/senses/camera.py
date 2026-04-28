@@ -51,16 +51,22 @@ _CAMERA_INDEX = int(os.getenv("CAMERA_INDEX", "0"))
 _LIBCAMERA_DEVICE = os.getenv("LIBCAMERA_DEVICE", "")  # empty → auto
 
 
+_LIBCAMERA_AVAILABLE: Optional[bool] = None
+
+
 def _libcamera_available() -> bool:
-    """Return True if libcamera-still is installed."""
-    try:
-        result = subprocess.run(
-            ["libcamera-still", "--version"],
-            capture_output=True, timeout=5
-        )
-        return result.returncode == 0
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        return False
+    """Return True if libcamera-still is installed (result cached)."""
+    global _LIBCAMERA_AVAILABLE
+    if _LIBCAMERA_AVAILABLE is None:
+        try:
+            result = subprocess.run(
+                ["libcamera-still", "--version"],
+                capture_output=True, timeout=5
+            )
+            _LIBCAMERA_AVAILABLE = result.returncode == 0
+        except (FileNotFoundError, subprocess.TimeoutExpired):
+            _LIBCAMERA_AVAILABLE = False
+    return _LIBCAMERA_AVAILABLE
 
 
 class Camera:
