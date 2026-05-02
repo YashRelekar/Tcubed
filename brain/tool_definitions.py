@@ -27,7 +27,7 @@ def _get_system_info(_: dict[str, Any]) -> str:
 TOOLS: list[Tool] = [
     Tool(
         name="get_time",
-        description="Get the current local time in ISO format.",
+        description="Get the current system local time (system timezone) in ISO format.",
         parameters={"type": "object", "properties": {}, "required": []},
         handler=_get_time,
     ),
