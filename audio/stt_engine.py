@@ -13,9 +13,27 @@ class WhisperCppSTT:
         self.config = config
         self.logger = logging.getLogger(__name__)
 
+    def _resolve_whisper_path(self) -> Path:
+        if self.config.whisper_path.exists():
+            return self.config.whisper_path
+        candidates = [
+            self.config.whisper_path.parent / "main",
+            self.config.whisper_path.parent / "whisper",
+        ]
+        for candidate in candidates:
+            if candidate.exists():
+                self.logger.warning(
+                    "Whisper binary not found at %s, using %s instead.",
+                    self.config.whisper_path,
+                    candidate,
+                )
+                return candidate
+        return self.config.whisper_path
+
     def transcribe(self, wav_path: Path) -> str:
-        if not self.config.whisper_path.exists():
-            raise FileNotFoundError(f"Whisper binary not found: {self.config.whisper_path}")
+        whisper_path = self._resolve_whisper_path()
+        if not whisper_path.exists():
+            raise FileNotFoundError(f"Whisper binary not found: {whisper_path}")
         if not self.config.whisper_model.exists():
             raise FileNotFoundError(f"Whisper model not found: {self.config.whisper_model}")
 
@@ -23,7 +41,7 @@ class WhisperCppSTT:
         output_txt = output_prefix.with_suffix(".txt")
 
         cmd = [
-            str(self.config.whisper_path),
+            str(whisper_path),
             "-m",
             str(self.config.whisper_model),
             "-f",

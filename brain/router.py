@@ -31,10 +31,9 @@ class ConversationRouter:
         return f"You are {self.config.assistant_name}."
 
     def _system_prompt(self) -> str:
-        return (
-            f"{self.soul_text}\n\n"
-            f"You are {self.config.assistant_name}, a Raspberry Pi 4 assistant."
-        )
+        if self.soul_text:
+            return self.soul_text
+        return f"You are {self.config.assistant_name}, a Raspberry Pi 4 assistant."
 
     def handle(self, user_text: str, emotion: EmotionResult) -> str:
         self.session_manager.add_message("user", user_text)
