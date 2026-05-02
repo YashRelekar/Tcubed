@@ -1,0 +1,10 @@
+numpy
+sounddevice
+httpx
+requests
+python-dotenv
+pygame
+opencv-python
+piper-tts
+lgpio
+pyserial
