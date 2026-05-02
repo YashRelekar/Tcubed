@@ -32,7 +32,12 @@ class AudioManager:
         status_queue: queue.Queue[str] = queue.Queue()
         pre_roll = deque(maxlen=max(1, int(0.5 * sample_rate / block_size)))
 
-        def callback(indata: np.ndarray, frames: int, time_info, status) -> None:  # type: ignore[override]
+        def callback(
+            indata: np.ndarray,
+            frames: int,
+            time_info: dict[str, float],
+            status: sd.CallbackFlags,
+        ) -> None:
             if status:
                 status_queue.put(str(status))
             audio_queue.put(indata.copy())
@@ -49,7 +54,7 @@ class AudioManager:
                 start_time = time.monotonic()
                 speech_started = False
                 silence_time = 0.0
-                frames: list[np.ndarray] = []
+                recorded_frames: list[np.ndarray] = []
 
                 while True:
                     if not status_queue.empty():
@@ -69,14 +74,14 @@ class AudioManager:
                         pre_roll.append(chunk)
                         if rms > silence_threshold:
                             speech_started = True
-                            frames.extend(list(pre_roll))
+                            recorded_frames.extend(list(pre_roll))
                             self.logger.info("Speech detected. Recording...")
                         elif time.monotonic() - start_time > max_seconds:
                             self.logger.warning("Speech not detected before timeout.")
                             return None
 
                     if speech_started:
-                        frames.append(chunk)
+                        recorded_frames.append(chunk)
                         if rms < silence_threshold:
                             silence_time += chunk_duration
                         else:
@@ -90,7 +95,7 @@ class AudioManager:
                             self.logger.warning("Reached max record duration.")
                             break
 
-                audio = np.concatenate(frames, axis=0).reshape(-1)
+                audio = np.concatenate(recorded_frames, axis=0).reshape(-1)
                 return audio
         except Exception as exc:  # pragma: no cover - hardware dependent
             self.logger.error("Failed to record audio: %s", exc)

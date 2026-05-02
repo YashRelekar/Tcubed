@@ -26,8 +26,8 @@ class PiperTTSEngine:
             return
         wav_path.parent.mkdir(parents=True, exist_ok=True)
         rate = rate or self.config.tts_rate
-        syn_config = SynthesisConfig(
-            length_scale=1.0 / rate if rate and rate > 0 else None,
-        )
+        if not rate or rate <= 0:
+            rate = 1.0
+        syn_config = SynthesisConfig(length_scale=1.0 / rate)
         with wave.open(str(wav_path), "wb") as wav_file:
             self.voice.synthesize_wav(text, wav_file, syn_config=syn_config)

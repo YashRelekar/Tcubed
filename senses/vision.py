@@ -4,6 +4,7 @@ import logging
 from typing import Optional
 
 import cv2
+import numpy as np
 
 
 class Vision:
@@ -12,7 +13,7 @@ class Vision:
         self.camera_index = camera_index
         self.capture = cv2.VideoCapture(camera_index)
 
-    def capture_frame(self) -> Optional[object]:
+    def capture_frame(self) -> Optional[np.ndarray]:
         if not self.capture.isOpened():
             self.logger.warning("Camera not available.")
             return None

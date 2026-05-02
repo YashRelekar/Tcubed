@@ -30,7 +30,7 @@ def main() -> None:
     logger = logging.getLogger("jarvis")
     stop_event = threading.Event()
 
-    def _signal_handler(signum, frame) -> None:  # type: ignore[override]
+    def _signal_handler(signum, _frame) -> None:
         logger.info("Received signal %s. Shutting down...", signum)
         stop_event.set()
 
