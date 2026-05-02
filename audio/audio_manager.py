@@ -15,10 +15,10 @@ import sounddevice as sd
 
 from config import Config
 
-PRE_ROLL_SECONDS = 0.5  # Must be > 0 for pre-roll buffering
-
 
 class AudioManager:
+    PRE_ROLL_SECONDS = 0.5  # Must be > 0 for pre-roll buffering
+
     def __init__(self, config: Config) -> None:
         self.config = config
         self.logger = logging.getLogger(__name__)
@@ -34,7 +34,10 @@ class AudioManager:
         audio_queue: queue.Queue[np.ndarray] = queue.Queue()
         status_queue: queue.Queue[str] = queue.Queue()
         pre_roll = deque(
-            maxlen=max(1, math.ceil(PRE_ROLL_SECONDS * sample_rate / block_size))
+            maxlen=max(
+                1,
+                math.ceil(self.PRE_ROLL_SECONDS * sample_rate / block_size),
+            )
         )
 
         def callback(
