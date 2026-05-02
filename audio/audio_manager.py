@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import math
 import queue
 import time
 import wave
@@ -32,7 +33,9 @@ class AudioManager:
 
         audio_queue: queue.Queue[np.ndarray] = queue.Queue()
         status_queue: queue.Queue[str] = queue.Queue()
-        pre_roll = deque(maxlen=max(1, int(PRE_ROLL_SECONDS * sample_rate / block_size)))
+        pre_roll = deque(
+            maxlen=max(1, math.ceil(PRE_ROLL_SECONDS * sample_rate / block_size))
+        )
 
         def callback(
             indata: np.ndarray,
