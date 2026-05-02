@@ -14,7 +14,7 @@ import sounddevice as sd
 
 from config import Config
 
-PRE_ROLL_SECONDS = 0.5
+PRE_ROLL_SECONDS = 0.5  # Must be > 0 for pre-roll buffering
 
 
 class AudioManager:
