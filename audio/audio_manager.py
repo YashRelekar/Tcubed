@@ -36,7 +36,7 @@ class AudioManager:
 
         def callback(
             indata: np.ndarray,
-            frames: int,
+            _frames: int,
             _time_info: dict[str, float],
             status: sd.CallbackFlags,
         ) -> None:

@@ -24,5 +24,5 @@ class Vision:
         return frame
 
     def release(self) -> None:
-        if self.capture:
+        if self.capture.isOpened():
             self.capture.release()
